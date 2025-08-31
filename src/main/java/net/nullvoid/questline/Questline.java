@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Questline.MODID)
 public class Questline {
-    public static final String MODID = "questline-comms-mod";
+    public static final String MODID = "questline_comms_mod";
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
