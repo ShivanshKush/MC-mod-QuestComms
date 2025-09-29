@@ -1,4 +1,10 @@
 {
   "item.questline_comms_mod.guild_master_spawn_egg": "Guild Master Spawn Egg",
-  "entity.questline_comms_mod.guild_master": "Guild Master"
+  "entity.questline_comms_mod.guild_master": "Guild Master",
+
+  "screen.dialogue.title": "Dialogue",
+  "screen.dialogue.continue": "Continue",
+  "npc.villager.name": "Villager",
+  "npc.guildmaster.name": "Guild Master",
+  "dialogue.welcome": "Hello traveler! Welcome to our village."
 }

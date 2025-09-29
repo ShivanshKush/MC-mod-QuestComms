@@ -12,19 +12,28 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.nullvoid.questline.dialogue.DialogueManager;
 import net.nullvoid.questline.entity.ModEntities;
+import net.nullvoid.questline.event.DialogueEventHandler;
+import net.nullvoid.questline.network.NetworkHandler;
 import net.nullvoid.questline.quests.QuestManager;
 import net.nullvoid.questline.registry.ModItems;
-import net.nullvoid.questline.villager.ModVillagers;
 import org.slf4j.Logger;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.nullvoid.questline.entity.GuildMasterRenderer;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.levelgen.Heightmap;
+
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.nullvoid.questline.villager.ModVillagers;
 
 
-
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(Questline.MOD_ID)
 public class Questline {
     public static final String MOD_ID = "questline_comms_mod";
@@ -32,17 +41,23 @@ public class Questline {
 
 
     public static QuestManager QUEST_MANAGER;
+    public static final DialogueManager DIALOGUE_MANAGER = new DialogueManager();
 
     public Questline(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
         modEventBus.addListener(this::commonSetup);
         IEventBus bus = context.getModEventBus();
+
         ModEntities.ENTITIES.register(bus);
         ModItems.ITEMS.register(bus);
 
 
         MinecraftForge.EVENT_BUS.register(this);
+        modEventBus.addListener(this::entityAttributeEvent);
         modEventBus.addListener(this::addCreative);
+
+        //Dialogue
+        MinecraftForge.EVENT_BUS.register(DialogueEventHandler.class);
 
         // Initialize Quest System
         QUEST_MANAGER = new QuestManager();
@@ -50,16 +65,21 @@ public class Questline {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-
+        NetworkHandler.register();
+        SpawnPlacements.register(ModEntities.GUILD_MASTER.get(),
+                SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Mob::checkMobSpawnRules);
     }
 
-    // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
-            // If so, add our spawn egg to the list
             event.accept(ModItems.GUILD_MASTER_SPAWN_EGG);
         }
 
+    }
+
+    private void entityAttributeEvent(EntityAttributeCreationEvent event) {
+        event.put(ModEntities.GUILD_MASTER.get(), Villager.createAttributes().build());
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

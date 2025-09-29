@@ -1,0 +1,51 @@
+{
+  "villager_root": {
+    "npcText": "Greetings, traveler!",
+    "playerResponses": [
+      {
+        "responseText": "Who are you?",
+        "nextNodeId": "villager_identity",
+        "action": null
+      },
+      {
+        "responseText": "I'm looking for work.",
+        "nextNodeId": "quest_offer_1",
+        "action": null
+      },
+      {
+        "responseText": "Goodbye.",
+        "nextNodeId": "goodbye",
+        "action": null
+      }
+    ]
+  },
+  "quest_offer_1": {
+    "npcText": "Excellent! I have a task for you. Can you gather 10 cobblestone for me?",
+    "playerResponses": [
+      {
+        "responseText": "I accept.",
+        "nextNodeId": "goodbye",
+        "action": "startQuest:first_quest"
+      },
+      {
+        "responseText": "No thanks.",
+        "nextNodeId": "goodbye",
+        "action": null
+      }
+    ]
+  },
+  "villager_identity": {
+    "npcText": "I am just a simple villager, trying to make a living.",
+    "playerResponses": [
+      {
+        "responseText": "I see. Farewell.",
+        "nextNodeId": "goodbye",
+        "action": null
+      }
+    ]
+  },
+  "goodbye": {
+    "npcText": "Farewell, traveler!",
+    "playerResponses": []
+  }
+}

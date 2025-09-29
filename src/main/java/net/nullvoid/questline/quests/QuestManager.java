@@ -4,6 +4,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import java.util.Collections;
+import net.nullvoid.questline.network.NetworkHandler;
+import net.nullvoid.questline.network.ExecuteDialogueActionPacket;
 
 import java.util.*;
 
@@ -13,6 +18,27 @@ public class QuestManager {
             "Talk to the Guildmaster",
             "Learn about the quest system"
     );
+
+    public void startQuest(Player player, String questId) {
+        // For now, we'll just handle our one test quest.
+        // Later, this will look up quest data from a file.
+        if (questId.equals("first_quest")) {
+            // Create a dummy quest object
+            Quest newQuest = new Quest(
+                    questId,
+                    "A Simple Task",
+                    "Gather 10 Cobblestone.",
+                    Collections.singletonList("Collect 10 Cobblestone: 0/10"),
+                    null // No reward for now
+            );
+
+            // Add the quest to the player
+            addQuestToPlayer(player.getUUID(), newQuest);
+
+            // Send a message to the player confirming the quest has started
+            player.sendSystemMessage(Component.literal("New Quest Started: A Simple Task"));
+        }
+    }
 
     // Add quest to a player's quest list
     public void addQuestToPlayer(UUID playerId, Quest quest) {

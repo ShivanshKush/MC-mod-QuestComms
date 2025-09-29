@@ -13,11 +13,11 @@ public class GuildMasterEntity extends Villager {
         super(type, level);
     }
 
-    @Override
+   /* @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (!this.level().isClientSide) {
             player.displayClientMessage(Component.literal("💬 Talk to the Guild Master"), true);
         }
         return InteractionResult.sidedSuccess(this.level().isClientSide);
-    }
+    }*/
 }
